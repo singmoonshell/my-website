@@ -19,6 +19,6 @@
         text-align: center;
         background-size: cover;
         background-color: #03A9F4;
-        background-image: url("./assets/background.jpg");
+        background-image: url("./assets/background.png");
     }
 </style>
