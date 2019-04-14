@@ -58,6 +58,7 @@
         height: @bar-height;
         border-radius: @radius;
         background-color: white;
+        border: 1px solid #c0c0c0;
         box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), inset 0 0 6px rgba(0, 0, 0, 0.2);
     }
 
