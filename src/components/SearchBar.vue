@@ -1,9 +1,27 @@
 <template>
-    <div id="search-bar" class="search-bar">
-        <div id="input-bar">
+    <div id="search-bar" class="search-bar" @click.stop>
+        <div id="suggestions" v-if="hasSuggestion && isShowSuggestions">
+            <ul>
+                <li v-for="(suggestion, index) in suggestions" :key="suggestion"
+                    :class="{ selected: index === selectionIndex }"
+                    @mouseenter="selectionIndex = index"
+                    @mousedown.prevent="{}"
+                    @click.prevent="search(suggestion)">
+                    {{ suggestion }}
+                </li>
+            </ul>
+        </div>
+        <div id="input-bar" v-bind:class="{ 'shadow-dilute': hasSuggestion }">
             <!--suppress HtmlFormInputWithoutLabel -->
-            <input id="search-input" autofocus="autofocus" v-model="searchValue" @keypress="keyPress">
-            <div id="search-button" @click="search">
+            <input id="search-input" type="text" autofocus="autofocus"
+                   v-model="keyword"
+                   @click="showSuggestions"
+                   @focusout="hideSuggestions"
+                   @keydown.up.prevent="moveSelection"
+                   @keydown.down.prevent="moveSelection"
+                   @keydown.enter="search()"
+                   @keydown.esc="hideSuggestions">
+            <div id="search-button" @click="search()">
                 <svg id="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 65.26 65.21" width="32" height="32">
                     <defs>
                         <linearGradient id="linear-gradient" x1="34.88" y1="30.16" x2="18" y2="0.92"
@@ -28,22 +46,97 @@
 </template>
 
 <script>
+    import _ from "lodash"
+
     export default {
         name: "SearchBar",
+
         data() {
             return {
-                searchValue: ''
+                keyword: '',
+                suggestions: [],
+                isShowSuggestions: true,
+                selectionIndex: null
             }
         },
+
+        computed: {
+            hasSuggestion: function () {
+                return this.suggestions.length > 0
+            }
+        },
+
+        watch: {
+            keyword: function () {
+                this.debouncedSuggest();
+            }
+        },
+
+        created: function () {
+            this.debouncedSuggest = _.debounce(this.suggest, 200)
+        },
+
         methods: {
-            search() {
-                window.open(`https://www.baidu.com/s?wd=${encodeURIComponent(this.searchValue)}`);
-                this.searchValue = '';
+            search(wd) {
+                window.open(`https://www.baidu.com/s?wd=${encodeURIComponent(wd || this.keyword)}`);
+                this.keyword = '';
+                this.clearSuggestions();
             },
-            keyPress(keyEvent) {
-                if (keyEvent.code === 'Enter' && this.searchValue) {
-                    this.search();
+
+            async suggest() {
+                if (!this.keyword.trim()) {
+                    this.clearSuggestions();
+                    return;
                 }
+
+                let response = await this.$http.jsonp('https://www.baidu.com/sugrec', {
+                    params: {
+                        prod: "pc",
+                        wd: this.keyword
+                    },
+                    jsonp: 'cb'
+                });
+
+                if (response && response.ok) {
+                    let body = response.body || {};
+                    if (body.q === this.keyword.replace(/\s+/g, " ")) {
+                        this.suggestions = _.map(body.g, i => i.q);
+                        this.showSuggestions();
+                    }
+                }
+            },
+
+            clearSuggestions() {
+                this.suggestions = []
+            },
+
+            showSuggestions() {
+                this.isShowSuggestions = true;
+            },
+
+            hideSuggestions() {
+                this.isShowSuggestions = false;
+            },
+
+            moveSelection(event) {
+                if (!this.hideSuggestions()) {
+                    this.selectionIndex = null;
+                    return;
+                }
+
+                let preIndex = this.selectionIndex == null ? -1 : this.selectionIndex;
+                if (event.key === 'ArrowUp') {
+                    --preIndex;
+                } else {
+                    ++preIndex;
+                }
+
+                if (preIndex < 0) {
+                    preIndex = this.suggestions.length - 1;
+                }
+                preIndex %= this.suggestions.length;
+
+                this.selectionIndex = preIndex < 0 ? null : preIndex;
             }
         }
     }
@@ -52,21 +145,30 @@
 <style lang="less" scoped>
     @bar-height: 50px;
     @radius: 25px;
+    @border-color: #c0c0c0;
+
+    .search-bar {
+        position: relative;
+    }
 
     #input-bar {
         position: relative;
         height: @bar-height;
         border-radius: @radius;
         background-color: white;
-        border: 1px solid #c0c0c0;
-        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), inset 0 0 6px rgba(0, 0, 0, 0.2);
+        border: 1px solid @border-color;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), inset 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #input-bar.shadow-dilute {
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1), inset 0 0 6px rgba(0, 0, 0, 0.1);
     }
 
     #search-input {
         width: 100%;
         height: @bar-height;
         font-size: 1.5rem;
-        padding: 0 75px 0 25px;
+        padding: 0 75px 0 @radius;
         box-sizing: border-box;
         border: none;
         background: none;
@@ -92,5 +194,33 @@
 
     #search-button:hover {
         background-color: #efefef;
+    }
+
+    #suggestions {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding-top: @bar-height;
+        min-height: 100px;
+        border: 1px solid @border-color;
+        background-color: white;
+        box-sizing: border-box;
+        border-radius: @radius @radius 2px 2px;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+
+        ul {
+            padding: 0;
+            margin: 5px 0;
+            list-style: none;
+
+            li {
+                padding: 3px @radius;
+            }
+
+            li.selected {
+                background-color: #efefef;
+            }
+        }
     }
 </style>
