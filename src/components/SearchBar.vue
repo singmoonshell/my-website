@@ -3,8 +3,9 @@
         <div id="suggestions" v-if="hasSuggestion && isShowSuggestions">
             <ul>
                 <li v-for="(suggestion, index) in suggestions" :key="suggestion"
-                    :class="{ selected: index === selectionIndex }"
-                    @mouseenter="selectionIndex = index"
+                    :class="{ selected: mouseSelection != null ? index === mouseSelection : index === selectionIndex }"
+                    @mouseenter="mouseSelection = index"
+                    @mouseleave="mouseSelection = null"
                     @mousedown.prevent="{}"
                     @click.prevent="search(suggestion)">
                     {{ suggestion }}
@@ -14,13 +15,13 @@
         <div id="input-bar" v-bind:class="{ 'shadow-dilute': hasSuggestion }">
             <!--suppress HtmlFormInputWithoutLabel -->
             <input id="search-input" type="text" autofocus="autofocus"
-                   v-model="keyword"
+                   v-model="displayKeyword"
                    @click="showSuggestions"
                    @focusout="hideSuggestions"
                    @keydown.up.prevent="moveSelection"
                    @keydown.down.prevent="moveSelection"
                    @keydown.enter="search()"
-                   @keydown.esc="hideSuggestions">
+                   @keydown.esc="cancel">
             <div id="search-button" @click="search()">
                 <svg id="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 65.26 65.21" width="32" height="32">
                     <defs>
@@ -56,13 +57,29 @@
                 keyword: '',
                 suggestions: [],
                 isShowSuggestions: true,
-                selectionIndex: null
+                selectionIndex: null,
+                mouseSelection: null
             }
         },
 
         computed: {
             hasSuggestion: function () {
                 return this.suggestions.length > 0
+            },
+
+            displayKeyword: {
+                get() {
+                    if (this.suggestions.length > 0 && this.selectionIndex != null) {
+                        return this.suggestions[this.selectionIndex];
+                    }
+
+                    return this.keyword;
+                },
+
+                set(value) {
+                    this.selectionIndex = null;
+                    this.keyword = value;
+                }
             }
         },
 
@@ -78,7 +95,7 @@
 
         methods: {
             search(wd) {
-                window.open(`https://www.baidu.com/s?wd=${encodeURIComponent(wd || this.keyword)}`);
+                window.open(`https://www.baidu.com/s?wd=${encodeURIComponent(wd || this.displayKeyword)}`);
                 this.keyword = '';
                 this.clearSuggestions();
             },
@@ -107,7 +124,15 @@
             },
 
             clearSuggestions() {
-                this.suggestions = []
+                this.mouseSelection = null;
+                this.selectionIndex = null;
+                this.suggestions = [];
+            },
+
+            cancel() {
+                this.mouseSelection = null;
+                this.selectionIndex = null;
+                this.hideSuggestions();
             },
 
             showSuggestions() {
@@ -119,12 +144,14 @@
             },
 
             moveSelection(event) {
-                if (!this.hideSuggestions()) {
+                if (!this.hasSuggestion) {
                     this.selectionIndex = null;
                     return;
                 }
 
-                let preIndex = this.selectionIndex == null ? -1 : this.selectionIndex;
+                let preIndex = this.mouseSelection != null
+                    ? this.mouseSelection
+                    : this.selectionIndex == null ? -1 : this.selectionIndex;
                 if (event.key === 'ArrowUp') {
                     --preIndex;
                 } else {
@@ -136,6 +163,7 @@
                 }
                 preIndex %= this.suggestions.length;
 
+                this.mouseSelection = null;
                 this.selectionIndex = preIndex < 0 ? null : preIndex;
             }
         }
