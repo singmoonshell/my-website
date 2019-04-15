@@ -3,7 +3,7 @@
         <div id="suggestions" v-if="hasSuggestion && isShowSuggestions">
             <ul>
                 <li v-for="(suggestion, index) in suggestions" :key="suggestion"
-                    :class="{ selected: mouseSelection != null ? index === mouseSelection : index === selectionIndex }"
+                    :class="{ selected: index === (mouseSelection != null ? mouseSelection : selectionIndex) }"
                     @mouseenter="mouseSelection = index"
                     @mouseleave="mouseSelection = null"
                     @mousedown.prevent="{}"
