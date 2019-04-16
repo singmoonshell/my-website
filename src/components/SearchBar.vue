@@ -69,7 +69,7 @@
 
             displayKeyword: {
                 get() {
-                    if (this.suggestions.length > 0 && this.selectionIndex != null) {
+                    if (this.hasSuggestion && this.selectionIndex != null) {
                         return this.suggestions[this.selectionIndex];
                     }
 
@@ -110,13 +110,18 @@
                     return;
                 }
 
-                let response = await this.$http.jsonp('https://www.baidu.com/sugrec', {
-                    params: {
-                        prod: "pc",
-                        wd: this.keyword
-                    },
-                    jsonp: 'cb'
-                });
+                let response;
+                try {
+                    response = await this.$http.jsonp('https://www.baidu.com/sugrec', {
+                        params: {
+                            prod: "pc",
+                            wd: this.keyword
+                        },
+                        jsonp: 'cb'
+                    });
+                } catch (resp) {
+                    response = resp;
+                }
 
                 if (response && response.ok) {
                     let body = response.body || {};
@@ -177,7 +182,7 @@
 <style lang="less" scoped>
     @bar-height: 50px;
     @radius: 25px;
-    @border-color: #c0c0c0;
+    @border-color: #d3d3d3;
 
     .search-bar {
         position: relative;
@@ -186,14 +191,14 @@
     #input-bar {
         position: relative;
         height: @bar-height;
-        border-radius: @radius;
+        border-radius: @bar-height;
         background-color: white;
-        border: 1px solid @border-color;
-        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), inset 0 0 6px rgba(0, 0, 0, 0.1);
+        border: 2px solid @border-color;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4), inset 0 0 6px rgba(0, 0, 0, 0.15);
     }
 
     #input-bar.shadow-dilute {
-        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1), inset 0 0 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1), inset 0 0 6px rgba(0, 0, 0, 0.15);
     }
 
     #search-input {
@@ -213,7 +218,7 @@
         top: 0;
         right: 0;
         height: @bar-height;
-        border-radius: @radius;
+        border-radius: @bar-height;
         background-color: #f7f7f7;
         transition: background-color 0.2s;
         -webkit-transition: background-color 0.2s;
@@ -234,11 +239,10 @@
         left: 0;
         right: 0;
         padding-top: @bar-height;
-        min-height: 100px;
         border: 1px solid @border-color;
         background-color: white;
         box-sizing: border-box;
-        border-radius: @radius @radius 2px 2px;
+        border-radius: 28px 28px 2px 2px;
         box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
 
         ul {
