@@ -1,3 +1,6 @@
+<!-- ╔╦╗╔═╗╔╦╗╔═╗╦  ╔═╗╔╦╗╔═╗ -->
+<!--  ║ ║╣ ║║║╠═╝║  ╠═╣ ║ ║╣  -->
+<!--  ╩ ╚═╝╩ ╩╩  ╩═╝╩ ╩ ╩ ╚═╝ -->
 <template>
     <div id="search-bar" class="search-bar" @click.stop>
         <div id="suggestions" v-if="hasSuggestion && isShowSuggestions">
@@ -46,6 +49,9 @@
     </div>
 </template>
 
+<!--  ╦╔═╗╦  ╦╔═╗╔═╗╔═╗╦═╗╦╔═╗╔╦╗ -->
+<!--  ║╠═╣╚╗╔╝╠═╣╚═╗║  ╠╦╝║╠═╝ ║  -->
+<!-- ╚╝╩ ╩ ╚╝ ╩ ╩╚═╝╚═╝╩╚═╩╩   ╩  -->
 <script>
     import _ from "lodash"
 
@@ -179,6 +185,9 @@
     }
 </script>
 
+<!-- ╔═╗╔═╗╔═╗ -->
+<!-- ║  ╚═╗╚═╗ -->
+<!-- ╚═╝╚═╝╚═╝ -->
 <style lang="less" scoped>
     @bar-height: 50px;
     @radius: 25px;

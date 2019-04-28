@@ -1,21 +1,23 @@
 <template>
     <div id="app">
-        <SearchBar></SearchBar>
+        <SearchBar class="search-bar"/>
+        <div class="launcher-container">
+            <LauncherBar class="launcher-bar"/>
+        </div>
     </div>
 </template>
 
 <script>
-    import SearchBar from './components/SearchBar.vue'
+    import SearchBar from './components/SearchBar'
+    import LauncherBar from './components/LauncherBar'
 
     export default {
         name: 'app',
-        components: {
-            SearchBar
-        }
+        components: {SearchBar, LauncherBar}
     }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     #app {
         top: 0;
         left: 0;
@@ -32,6 +34,16 @@
         .search-bar {
             width: 40%;
             margin: 10% auto;
+        }
+
+        .launcher-container {
+            left: 0;
+            right: 0;
+            bottom: 3.5%;
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 </style>
