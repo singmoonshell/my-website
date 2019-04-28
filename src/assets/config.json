@@ -1,0 +1,40 @@
+{
+  "launchers": [
+    {
+      "title": "GitHub",
+      "icon": "icon-github",
+      "url": "https://www.github.com"
+    },
+    {
+      "title": "GitHub",
+      "icon": "icon-github",
+      "url": "https://www.github.com"
+    },
+    {
+      "title": "GitHub",
+      "icon": "icon-github",
+      "url": "https://www.github.com"
+    },
+    {
+      "title": "Group",
+      "isGroup": true,
+      "launchers": [
+        {
+          "title": "GitHub",
+          "icon": "icon-github",
+          "url": "https://www.github.com"
+        },
+        {
+          "title": "GitHub",
+          "icon": "icon-github",
+          "url": "https://www.github.com"
+        },
+        {
+          "title": "GitHub",
+          "icon": "icon-github",
+          "url": "https://www.github.com"
+        }
+      ]
+    }
+  ]
+}

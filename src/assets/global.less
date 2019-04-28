@@ -1,0 +1,49 @@
+@launcher-width: 120px;
+@launcher-icon-size: 100px;
+
+.launcher {
+  color: white;
+  width: @launcher-width;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+
+  .icon {
+    cursor: pointer;
+    width: @launcher-icon-size;
+    height: @launcher-icon-size;
+    box-sizing: border-box;
+    border-radius: 100%;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .3);
+    transition: box-shadow .3s;
+  }
+
+  .icon:hover {
+    box-shadow: 0 1px 10px rgba(0, 0, 0, .5);
+  }
+
+  .icon:active {
+    box-shadow: 0 1px 7px rgba(0, 0, 0, .5);
+  }
+
+  .title {
+    cursor: pointer;
+    max-width: @launcher-width;
+    margin-top: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
+  }
+}
+
+.launcher + .launcher {
+  margin-left: 20px;
+}
+
+.icon-github {
+  border-radius: 100%;
+  background-size: cover;
+  background-color: white;
+  background-image: url("./github.png");
+}

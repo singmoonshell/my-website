@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueResource from 'vue-resource'
+import './assets/global.less'
 
 Vue.config.productionTip = false;
 Vue.use(VueResource);
