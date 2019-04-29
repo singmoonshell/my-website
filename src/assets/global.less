@@ -1,5 +1,7 @@
 @launcher-width: 120px;
 @launcher-icon-size: 100px;
+@launcher-width-small: 80px;
+@launcher-icon-size-small: 64px;
 
 .launcher {
   color: white;
@@ -15,7 +17,7 @@
     box-sizing: border-box;
     border-radius: 100%;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .3);
-    transition: box-shadow .3s;
+    transition: box-shadow .3s ease-out;
   }
 
   .icon:hover {
@@ -39,6 +41,141 @@
 
 .launcher + .launcher {
   margin-left: 20px;
+}
+
+.launcher.small {
+  width: @launcher-width-small;
+
+  .icon {
+    width: @launcher-icon-size-small;
+    height: @launcher-icon-size-small;
+    box-shadow: none;
+  }
+
+  .icon:hover {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, .2);
+  }
+
+  .icon:active {
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, .2);
+  }
+
+  .title {
+    font-size: 12px;
+    max-width: @launcher-width-small;
+  }
+}
+
+.tooltip {
+  outline: none;
+  z-index: 10000;
+  display: block !important;
+
+  .tooltip-inner {
+    background: black;
+    color: white;
+    border-radius: 16px;
+    padding: 5px 10px 4px;
+  }
+
+  @arrow-size: 8px;
+
+  .tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: @arrow-size;
+    border-color: black;
+    z-index: 1;
+  }
+
+  &[x-placement^="top"] {
+    margin-bottom: @arrow-size;
+
+    .tooltip-arrow {
+      border-width: @arrow-size @arrow-size 0 @arrow-size;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      bottom: -@arrow-size;
+      left: calc(50% - @arrow-size);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  &[x-placement^="bottom"] {
+    margin-top: @arrow-size;
+
+    .tooltip-arrow {
+      border-width: 0 @arrow-size @arrow-size @arrow-size;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-top-color: transparent !important;
+      top: -@arrow-size;
+      left: calc(50% - @arrow-size);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  &[x-placement^="right"] {
+    margin-left: @arrow-size;
+
+    .tooltip-arrow {
+      border-width: @arrow-size @arrow-size @arrow-size 0;
+      border-left-color: transparent !important;
+      border-top-color: transparent !important;
+      border-bottom-color: transparent !important;
+      left: -@arrow-size;
+      top: calc(50% - @arrow-size);
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  &[x-placement^="left"] {
+    margin-right: @arrow-size;
+
+    .tooltip-arrow {
+      border-width: @arrow-size 0 @arrow-size @arrow-size;
+      border-top-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      right: -@arrow-size;
+      top: calc(50% - @arrow-size);
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  &.popover {
+    @color: rgba(255, 255, 255, .5);
+
+    .popover-inner {
+      background: @color;
+      padding: 20px;
+      border-radius: 2px;
+      box-shadow: 0 5px 30px rgba(black, .1);
+    }
+
+    .popover-arrow {
+      border-color: @color;
+    }
+  }
+
+  &[aria-hidden='true'] {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .15s, visibility .15s;
+  }
+
+  &[aria-hidden='false'] {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .15s;
+  }
 }
 
 .icon-github {

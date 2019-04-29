@@ -3,27 +3,37 @@
 <!--  ╩ ╚═╝╩ ╩╩  ╩═╝╩ ╩ ╩ ╚═╝ -->
 <template>
     <div class="launcher launcher-group">
-        <i v-if="icon" class="icon" :class="icon"></i>
-        <div v-else class="icon">
-            <div v-if="launchers.length" class="icon-clipper">
-                <i v-if="launchers.length === 1" class="icon-inner" :class="launchers[0].icon"></i>
-                <div v-else-if="launchers.length>=2">
-                    <div>
-                        <i v-for="launcher in row0"
-                           :key="launcher.title"
-                           class="icon-inner"
-                           :class="launcher.icon"></i>
-                    </div>
-                    <div :class="{ margin : launchers.length > 3}">
-                        <i v-for="launcher in row1"
-                           :key="launcher.title"
-                           class="icon-inner"
-                           :class="launcher.icon"></i>
+        <v-popover offset="3" placement="top" :disabled="!launchers.length">
+            <i v-if="icon" class="icon" :class="icon"></i>
+            <div v-else class="icon">
+                <div v-if="launchers.length" class="icon-clipper">
+                    <i v-if="launchers.length === 1" class="icon-inner" :class="launchers[0].icon"></i>
+                    <div v-else-if="launchers.length>=2">
+                        <div>
+                            <i v-for="launcher in row0"
+                               :key="launcher.title"
+                               class="icon-inner"
+                               :class="launcher.icon"></i>
+                        </div>
+                        <div :class="{ margin : launchers.length > 3}">
+                            <i v-for="launcher in row1"
+                               :key="launcher.title"
+                               class="icon-inner"
+                               :class="launcher.icon"></i>
+                        </div>
                     </div>
                 </div>
+                <div class="border"></div>
             </div>
-            <div class="border"></div>
-        </div>
+
+            <template slot="popover">
+                <div class="launcher-group-popover"
+                     :style="{ 'grid-template-columns': `repeat(${Math.min(launchers.length, 5)}, auto)` }">
+                    <Launcher v-close-popover v-for="launcher in launchers" :key="launcher.title" v-bind="launcher"
+                              class="small"/>
+                </div>
+            </template>
+        </v-popover>
         <span class="title">{{ title }}</span>
     </div>
 </template>
@@ -33,8 +43,13 @@
 <!--  ║╠═╣╚╗╔╝╠═╣╚═╗║  ╠╦╝║╠═╝ ║  -->
 <!-- ╚╝╩ ╩ ╚╝ ╩ ╩╚═╝╚═╝╩╚═╩╩   ╩  -->
 <script>
+    import Launcher from './Launcher'
+
     export default {
         name: "LauncherGroup",
+
+        components: {Launcher},
+
         props: {
             title: String,
             icon: String,
@@ -117,5 +132,11 @@
                 box-shadow: inset 0 1px 5px rgba(0, 0, 0, .3);
             }
         }
+    }
+
+    .launcher-group-popover {
+        grid-gap: 10px;
+        display: inline-grid;
+        grid-template-columns: repeat(5, auto);
     }
 </style>
