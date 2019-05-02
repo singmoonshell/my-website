@@ -16,6 +16,7 @@
     height: @launcher-icon-size;
     box-sizing: border-box;
     border-radius: 100%;
+    background-color: white;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .3);
     transition: box-shadow .3s ease-out;
   }
@@ -64,6 +65,10 @@
     font-size: 12px;
     max-width: @launcher-width-small;
   }
+}
+
+.launcher.small + .launcher.small {
+  margin-left: 0;
 }
 
 .tooltip {
@@ -177,8 +182,48 @@
 }
 
 .icon-github {
-  border-radius: 100%;
   background-size: cover;
-  background-color: white;
-  background-image: url("./github.png");
+  border-radius: 100%;
+  background-image: url("icons/github.png");
+}
+
+.icon-google {
+  background: url("icons/google.svg");
+}
+
+.icon-zhihu {
+  background: url("icons/zhihu.svg");
+}
+
+.icon-oschina {
+  background: url("icons/oschina.svg");
+}
+
+.icon-google-translate {
+  background: url("icons/google_translate.svg");
+}
+
+.icon-youdao {
+  background-size: cover;
+  background-image: url("icons/youdao.png");
+}
+
+.icon-ithome {
+  background-size: cover;
+  background-image: url("icons/ithome.png");
+}
+
+.icon-iqiyi {
+  background-size: cover;
+  background-image: url("icons/iqiyi.png");
+}
+
+.icon-jd {
+  background-size: cover;
+  background-image: url("icons/jd.png");
+}
+
+.icon-gamer-sky {
+  background-size: cover;
+  background-image: url("icons/gamer_sky.png");
 }

@@ -15,7 +15,7 @@
                                class="icon-inner"
                                :class="launcher.icon"></i>
                         </div>
-                        <div :class="{ margin : launchers.length > 3}">
+                        <div>
                             <i v-for="launcher in row1"
                                :key="launcher.title"
                                class="icon-inner"
@@ -58,16 +58,14 @@
 
         computed: {
             row0: function () {
-                return this.launchers.slice(0, this.launchers.length === 3 ? 1 : 2)
+                return this.launchers.slice(0, this.launchers.length >= 3 ? 1 : 2)
             },
 
             row1: function () {
                 if (this.launchers.length < 3) {
                     return []
-                } else if (this.launchers.length === 3) {
-                    return this.launchers.slice(1, 3)
                 }
-                return this.launchers.slice(2, 4)
+                return this.launchers.slice(1, 3)
             }
         }
     }
@@ -114,6 +112,7 @@
                     width: @2R;
                     height: @2R;
                     border-radius: 100%;
+                    background-color: white;
                 }
 
                 i.icon-inner + i.icon-inner {
