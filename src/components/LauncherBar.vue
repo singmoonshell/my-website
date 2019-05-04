@@ -16,7 +16,7 @@
 <script>
     import Launcher from './Launcher'
     import LauncherGroup from './LauncherGroup'
-    import {launchers} from '../assets/config'
+    import config from '../config'
 
     export default {
         name: "LauncherBar",
@@ -25,7 +25,7 @@
 
         data() {
             return {
-                launchers: launchers
+                launchers: config.launchers
             }
         },
 
