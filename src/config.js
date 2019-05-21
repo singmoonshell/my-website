@@ -16,6 +16,11 @@ export default {
             isGroup: true,
             launchers: [
                 {
+                    title: "Stack Overflow",
+                    icon: "icon-stack-overflow",
+                    url: "https://stackoverflow.com"
+                },
+                {
                     title: "知乎",
                     icon: "icon-zhihu",
                     url: "https://www.zhihu.com"
@@ -28,7 +33,7 @@ export default {
             ]
         },
         {
-            title: "Translate",
+            title: "翻译",
             isGroup: true,
             launchers: [
                 {
@@ -58,14 +63,14 @@ export default {
                     url: "http://www.iqiyi.com/"
                 },
                 {
+                    title: "天猫",
+                    icon: "icon-tmall",
+                    url: "https://www.tmall.com/"
+                },
+                {
                     title: "IT之家",
                     icon: "icon-ithome",
                     url: "https://www.ithome.com/"
-                },
-                {
-                    title: "游民星空",
-                    icon: "icon-gamer-sky",
-                    url: "https://www.gamersky.com/"
                 }
             ]
         }
