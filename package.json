@@ -1,7 +1,12 @@
 {
-  "name": "website",
+  "name": "my-website",
   "version": "0.1.0",
-  "private": true,
+  "author": "Yii.Guxing",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YiiGuxing/my-website.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
