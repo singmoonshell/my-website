@@ -8,7 +8,7 @@
             <div v-else class="icon">
                 <div v-if="launchers.length" class="icon-clipper">
                     <i v-if="launchers.length === 1" class="icon-inner" :class="launchers[0].icon"></i>
-                    <div v-else-if="launchers.length>=2">
+                    <div v-else-if="launchers.length>=2" :count="Math.min(3,launchers.length)">
                         <div>
                             <i v-for="launcher in row0"
                                :key="launcher.title"
@@ -106,6 +106,10 @@
 
                 > div > div.margin {
                     margin-top: @margins;
+                }
+
+                > div[count="3"] {
+                    margin-top: -@margins;
                 }
 
                 i.icon-inner {
